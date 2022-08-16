@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atyyx.boot05web01.mapper.EmpMapper">
+    <!--
+    1.type指定二级缓存采用的类型
+    2.eviction指定缓存回收的机制
+    3.readonly
+    4.flushInterval指定刷新的时间
+    -->
+    <cache eviction="LRU"
+           flushInterval="1000" readOnly="true"/>  <!--通过这个标签来说明开启二级缓存功能-->
+
+    <!--
+     public Emp getEmpAndDeptbyEmpId(Integer EMPId);
+    -->
+    <select id="getEmpAndDeptbyEmpId" resultMap="returnEmpAndDept" >
+        select id,lastName,email,gender,e.d_id,dept_name
+        from emplyee   e
+        left join dept   d
+        on e.d_id=d.d_id
+        where e.id=#{empId}
+    </select>
+
+    <resultMap id="returnEmpAndDept" type="com.atyyx.boot05web01.bean.Empper">
+         <id column="id" property="id"/>
+        <result column="lastName" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+<!--        <result column="d_id" property="dept.dept_id"/>-->
+<!--        <result column="dept_name" property="dept.dept_name"/>-->
+        <association property="dept" javaType="com.atyyx.boot05web01.bean.Dept">
+            <id column="d_id" property="dept_id"/>
+            <result column="dept_name" property="dept_name"/>
+        </association>
+    </resultMap>
+
+    <!--
+       public Empper getEmpAndDeptbyStepEmpId(@Param("empId") Integer empId);
+    -->
+    <select id="getEmpAndDeptbyStepEmpId" resultMap="empAndDeptByStepResultMap">
+        select * from emplyee  where id=${empId}
+    </select>
+    <resultMap id="empAndDeptByStepResultMap" type="com.atyyx.boot05web01.bean.Empper">
+        <id column="id" property="id"/>
+        <result column="lastName" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        <association property="dept"
+        select="com.atyyx.boot05web01.mapper.DeptMapper.getEmpAndDeptByStepTwo"
+        column="d_id"
+        fetchType="eager">
+            <!--
+            这里select中要写全类名：namespace+方法id
+            column里面写你需要第二次查询时候的条件，某一个字段作为下一个查询语句的条件
+            fetchType:用来选择立即加载还是懒加载
+            -->
+        </association>
+    </resultMap>
+
+    <!--
+      List<Empper> getDeptAndEmpsByStepTwo(@Param("deptId") Integer deptId);
+    -->
+    <select id="getDeptAndEmpsByStepTwo" resultType="com.atyyx.boot05web01.bean.Empper">
+        select * from emplyee
+        where d_id=#{deptId}
+    </select>
+</mapper>

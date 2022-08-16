@@ -1,0 +1,21 @@
+-------------------------------------------------------------------------------
+Test set: com.atyyx.boot05web01.Junit5Test
+-------------------------------------------------------------------------------
+Tests run: 15, Failures: 3, Errors: 1, Skipped: 1, Time elapsed: 6.879 s <<< FAILURE! - in com.atyyx.boot05web01.Junit5Test
+testTimeout  Time elapsed: 0.517 s  <<< ERROR!
+java.util.concurrent.TimeoutException: testTimeout() timed out after 500 milliseconds
+
+testassumptions  Time elapsed: 0.007 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: 结果不是true ==> expected: <true> but was: <false>
+	at com.atyyx.boot05web01.Junit5Test.testassumptions(Junit5Test.java:157)
+
+all  Time elapsed: 0.008 s  <<< FAILURE!
+org.opentest4j.MultipleFailuresError: 
+test (1 failure)
+	org.opentest4j.AssertionFailedError: 结果不是1 ==> expected: <1> but was: <2>
+	at com.atyyx.boot05web01.Junit5Test.all(Junit5Test.java:69)
+
+testSimpleAssertions  Time elapsed: 0.005 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: 业务逻辑计算失败 ==> expected: <5> but was: <6>
+	at com.atyyx.boot05web01.Junit5Test.testSimpleAssertions(Junit5Test.java:37)
+

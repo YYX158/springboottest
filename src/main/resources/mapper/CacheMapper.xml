@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atyyx.boot05web01.mapper.CacheMapper">
+    <!--
+    1.type指定二级缓存采用的类型
+    2.eviction指定缓存回收的机制
+    3.readonly
+    4.flushInterval指定刷新的时间
+    -->
+    <cache eviction="LRU"
+           flushInterval="1000"  readOnly="true"/>  <!--通过这个标签来说明开启二级缓存功能-->
+
+     <sql id="TEmpColumns">
+         eid as "eid",
+         emp_name as "empName",
+         age as "age",
+         sex as "sex",
+         email as "email"
+     </sql>
+    <!--
+    select标签并不会自动添加上select，但是where标签会自动添加上where
+    where标签能够自动删掉前面的条件前面的and或者or
+    -->
+    <select id="getEmpById" resultType="com.atyyx.boot05web01.bean.Emp">
+       select
+         <include refid="TEmpColumns"></include>
+       from t_emp
+       <where>
+           <if test="eid != null and eid !=''">
+               and eid=#{eid}
+           </if>
+           <if test="empName!=null and empName!=''">
+               and emp_name=#{empName}
+           </if>
+           <if test="age !=null and age !=''">
+               and age=#{age}
+           </if>
+           <if test="sex !=null and sex !=''">
+                and sex=#{sex}
+           </if>
+           <if test="email != null and email !=''">
+               and email= #{email}
+           </if>
+       </where>
+    </select>
+
+    <!--
+    1.useGeneratedKeys表示开启自增主键
+    2.keyProperty 表明将自增主键值保存在实体类对象的哪个位置上
+    -->
+    <insert id="insertEmp" useGeneratedKeys="true" keyProperty="eid">
+        insert into t_emp values(#{eid},#{empName},#{age},#{sex},#{email})
+    </insert>
+
+    <!--#{}：底层使用的是占位符赋值   #{}是可以自己加单引号的
+    ${}底层使用的是字符串拼接   ${}不会自己加单引号
+    concat是Mysql中的字符串连接函数
+    <when>的结构就跟if
+    else if
+    一样
+    <otherwise>就跟最后的else是一样的
+    -->
+    <select id="selectEmpbyXing" resultType="com.atyyx.boot05web01.bean.Emp">
+        select
+           <include refid="TEmpColumns"></include>
+        from t_emp
+    <choose>
+        <when test="xing!=null and xing!=''">
+            <where>
+                emp_name like "%"#{xing}"%"   <!--最经常使用的方式-->
+            </where>
+        </when>
+        <when test="xing!=null and xing!=''">
+            <where>
+                emp_name like concat('%',#{xing},'%')
+            </where>
+        </when>
+        <otherwise>
+            <trim prefix="where" suffixOverrides="and|or">
+                <if test="xing!=null and xing!=''">
+                    emp_name like '%${xing}%' and
+                </if>
+            </trim>
+        </otherwise>
+    </choose>
+     order by eid desc
+     limit ${PageCurrent},${PageSize} ;
+    </select>
+
+     <!--
+     foreach循环中
+     separator用来切分每一次循环体
+     -->
+    <delete id="deleteMoreByArray">
+       delete from t_emp
+       where eid in
+      (
+        <foreach collection="eids" item="eid" separator=",">
+            #{eid}
+        </foreach>
+      )
+    </delete>
+
+    <!--
+    foreach中的open表示是在一开始的循环之前添加上指定的循环体
+    -->
+    <insert id="insertMoreInsertByList">
+        insert into t_emp values
+        <foreach collection="emps" item="emp" separator=",">
+            (null,#{emp.empName},#{emp.age},#{emp.sex},#{emp.email})
+        </foreach>
+    </insert>
+</mapper>

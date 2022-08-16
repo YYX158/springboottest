@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table class="display table table-bordered table-striped">
+    <div class="dataTables_info">当前第[[${page.current}]]页，总计[[${page.pages}]]页   共[[${page.total}]] 条记录</div>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>id</th>
+        <th>name</th>
+        <th>age</th>
+        <th>email</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody role="alert" aria-live="polite" aria-relevant="all">
+    <tr class="gradex odd" th:each="user,stat:${page.records}">
+        <td>[[${stat.count}]]</td>  <!--指明现在是第几个-->
+        <td th:text="${user.id}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.email}"></td>
+
+    </tr>
+    </tbody>
+</table>
+<div class="dataTables_paginate paging_bootstrap pagination">
+    <ul>
+        <li class="prev disabled"><a href="#">前一页</a></li>
+        <!--生成一个序列
+        ${#numbers.sequence(from,to)}-->
+        <li th:class="${num== page.current?'active':''}" th:each="num:${#numbers.sequence(1,page.pages)}"><a href="@{/test(pn=${num})}">[[${num}]]</a> </li>
+        <li class="next disabled"><a href="#">下一页</a> </li>
+    </ul>
+</div>
+</body>
+</html>

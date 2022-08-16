@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试REST风格</title>
+</head>
+<body>
+<h1>hello,yyx</h1>
+<form action="/user" method="get">
+    <input type="submit" value="REST-GET 提交">
+</form>
+<form action="/user" method="post">
+    <input type="submit" value="REST-POST 提交">
+</form>
+<form action="/user" method="post">
+    <input name="_m" type="hidden" value="DELETE"><!--用来保证测试通过-->
+    <input name="_method" type="hidden" value="DELETE">
+    <input type="submit" value="REST-DELETE 提交">
+</form>
+<form action="/user" method="post">
+    <input name="_method" type="hidden" value="PUT">
+    <input type="submit" value="REST-PUT 提交">
+</form>
+<hr/>
+测试基本注解
+<ul>
+    <a  href="car/3/owner/lisi?age=18&inters=basketball&inters=games">@GetMapping("/car/{id}/owner/{username}")</a>
+    <li>@PathVariable(路径变量)</li>
+    <li>@RequestHeader(获取请求头)</li>
+    <li>@RequestParam(获取请求参数)</li>
+    <li>@CookieValue(获取Cookie的值)</li>
+    <li>@RequestAttribute(获取request域属性)</li>
+    <li>@RequestBody(获取请求体)</li>
+    <li>@MatrixVariable(矩阵变量)</li>
+</ul>
+
+/cars/{path}?xxxx=xxxx&aaaa=cccc   queryString 查询字符串。  @RequestParams: <br/>
+/cars/{path;low=34;brand=byd,audi,yd}   ;矩阵变量<br/>
+cookie如果被禁用了，session里面的内容怎么使用:
+session.set(a,b) ---->jessionid  ----->cookie    ------>每次发请求都会携带
+url重写：/abc;jessionid=xxxx  把cookie的值使用矩阵变量的方式进行传递
+<br/>
+<form action="/save" method="post">
+    测试@RequestBody 获取数据<br/>
+    用户名:<input name="userName"><br>
+    邮箱:<input name="email">
+    <input type="submit" value="提交">
+</form>
+<a href="/car/1">@PathVariable</a>
+<a href="/car/1">@RequestHeader</a>
+<a href="/car?brand=byd">@RequestParam-GET</a><br>
+<a href="/car?brand=byd&brand=yd">@RequestParam-GET</a>
+<a href="/car/sell;low=34;brand=byd,audi,yd">@MatrixVariable(矩阵变量)</a>
+<a href="/cars/sell;low=34;brand=byd;brand=audi;brand=yd">@MatrixVariable(矩阵变量)</a>
+<a href="/boss/1;age=20/2;age=10">@MatrixVariable(矩阵变量)/boss/{bossId}/{empId}</a>
+<br/>
+测试封装POJO：
+<form action="/saveuser" method="post">
+    姓名: <input name="userName" value="张三"><br/>
+    年龄： <input name="age" value="18"/><br/>
+    生日:  <input name="birth" value="2019/12/10"/><br/>
+<!--    宠物姓名:<input name="pet.name" value="阿猫"/><br/>-->
+<!--    宠物年龄：<input name="pet.age" value="5"><br/>-->
+    宠物:<input name="pet" value="阿狗,7">
+    <input type="submit" value="保存">
+</form>
+</body>
+</html>

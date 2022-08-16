@@ -1,0 +1,62 @@
+{
+  "groups": [
+    {
+      "name": "management.endpoint.myservice",
+      "type": "com.atyyx.boot05web01.acutuator.endpoint.MyServiceEndPoint",
+      "sourceType": "com.atyyx.boot05web01.acutuator.endpoint.MyServiceEndPoint"
+    },
+    {
+      "name": "person",
+      "type": "com.atyyx.boot05web01.bean.Boss",
+      "sourceType": "com.atyyx.boot05web01.bean.Boss"
+    },
+    {
+      "name": "person",
+      "type": "com.atyyx.boot05web01.bean.Worker",
+      "sourceType": "com.atyyx.boot05web01.bean.Worker"
+    },
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.atyyx.boot05web01.config.MyDataSourceConfig",
+      "sourceMethod": "dataSource()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "management.endpoint.myservice.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "com.atyyx.boot05web01.acutuator.endpoint.MyServiceEndPoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.myservice.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the myservice endpoint.",
+      "sourceType": "com.atyyx.boot05web01.acutuator.endpoint.MyServiceEndPoint",
+      "defaultValue": true
+    },
+    {
+      "name": "person.age",
+      "type": "java.lang.Integer",
+      "sourceType": "com.atyyx.boot05web01.bean.Boss"
+    },
+    {
+      "name": "person.age",
+      "type": "java.lang.Integer",
+      "sourceType": "com.atyyx.boot05web01.bean.Worker"
+    },
+    {
+      "name": "person.name",
+      "type": "java.lang.String",
+      "sourceType": "com.atyyx.boot05web01.bean.Boss"
+    },
+    {
+      "name": "person.name",
+      "type": "java.lang.String",
+      "sourceType": "com.atyyx.boot05web01.bean.Worker"
+    }
+  ],
+  "hints": []
+}

@@ -1,0 +1,117 @@
+#spring:
+#  mvc:
+#    static-path-pattern: /res/**     #自己定义的静态资源
+#  web:
+#    resources:
+#      static-locations: [classpath:/haha/]  #改变了一下静态资源文件夹的位置
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true  #手动开始REST风格（PUT/DELETE）
+
+    contentnegotiation:
+      favor-parameter: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/jdbc
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    druid:
+      filters: stat,wall,sl4j  #stat 是监控sql的    wall是防火墙的   sl4j是监控日志的
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 123456
+        reset-enable: false
+
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      aop-patterns: com.atyyx.*
+      filter:
+        stat:
+          slow-sql-millis: 1000  #慢查询的时间
+          log-slow-sql: true
+          enabled: true # 开启
+        wall:
+          enabled: true  #开启防火墙的功能
+          config:
+            update-allow: true  #所有的更新都允许
+
+  jdbc:
+    template:
+      query-timeout: 3  #设置超时时间
+#  boot:
+#    admin:
+#      client:
+#        url: http://http://localhost:8888
+#        instance:
+#          prefer-ip: true  #使用ip注册
+
+  application:
+    name: boot-05-web-admin
+  redis:
+    host: 192.168.140.129
+    port: 6379
+    expireTime: 3600000 #单位秒
+    client-type: jedis #指明要用jedis的连接工厂
+
+
+#  boot:
+#    admin:
+#      client:
+#        url: http://localhost:8888   # 这里需要填写server的地址
+
+#配置Mybatis
+mybatis:
+  #config-location: classpath:mybatis/mybatis-config.xml  #mybatis配置文件的位置
+  mapper-locations: classpath:mapper/*.xml  #声明mapper的位置
+  configuration:   #指定mybatis中的使用规则
+    map-underscore-to-camel-case: true   #声明用系统默认的全局配置文件
+
+  proxy_temp_file_write_size: 10MB
+
+
+logging:
+  level:
+    com.atyyx.boot05web01.mapper: debug
+    com.atyyx.boot05web01.mapper.CacheMapper: debug
+
+  #management 是所有的actuator的配置
+management:
+  endpoints:
+    enabled-by-default: true  #默认开启的端点是true  -- 默认开启所有的监控端点
+    web:
+      exposure:
+        include: '*'  #以web方式暴露所有端点
+  endpoint:  #对某个端点的具体配置
+
+    health:
+      show-details: always  #显示详细信息
+      enabled: true
+
+    info:
+      enabled: true
+
+    beans:
+      enabled: true
+
+    metrics:
+      enabled: true
+
+
+info:
+  appName: boot-admin
+  appVersion: 1.0.0
+  mavenProjectName: @project.artifactId@
+  mavenProjectVersion: @project.version@
+
+
+
+
+
+
+
